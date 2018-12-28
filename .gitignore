@@ -18,6 +18,35 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Spyder project settings
+.spyderproject
+.spyproject
+
+#############
+## Python
+#############
+
+*.py[cod]
+
+# Packages
+*.egg
+*.egg-info
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+
 # =========================
 # Operating System Files
 # =========================
+
+##################
+##Project Specific
+##################
+
+test.py
+Coord_data.txt
