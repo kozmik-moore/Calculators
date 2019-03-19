@@ -13,13 +13,15 @@ MIN = -100
 MAX = 100
 INTERVAL = 5
 
-def addOperators(l1, l2):
+
+def add_operators(l1, l2):
     tmp = []
     for i in range(len(l1)):
         tmp.append(l1[i] + l2[i])
     return tmp
 
-def reduce(l):     #list of three integers
+
+def reduce(l):     # list of three integers
     tmp = l.copy()
     tmp.sort()
     a = gcd(int(tmp[0]), int(tmp[1]))
@@ -28,8 +30,9 @@ def reduce(l):     #list of three integers
     for i in range(len(tmp)):
         tmp[i] = tmp[i]//b
     return tmp
-        
-def getOperators():
+
+
+def get_operators():
     system = []
     file = 'Input.txt'
     f = open(file, 'r')
@@ -39,8 +42,9 @@ def getOperators():
             tmp[index] = int(tmp[index])
         system.append(tmp)
     return system
-        
-def write(l):       #list of lists
+
+
+def write(l):       # list of lists
     file = 'Output.txt'
     f = open(file, 'w')
     for item in l:
@@ -49,16 +53,18 @@ def write(l):       #list of lists
         else:
             f.write(str(item[0]) + '  ' + str(item[1]) + '\n')
     f.close()
-    
-def getVector(l):       #list
+
+
+def get_vector(l):       # list
     if type(l[0]) is int:
         return l
     else:
         return l[0]
-    
+
+
 def plot(l):
     for item in l:
-        v = getVector(item)
+        v = get_vector(item)
         x = np.linspace(MIN, MAX, INTERVAL)
         y = (-1*v[0]/v[1])*x + (v[2]/v[1])
         plt.plot(x,y)
@@ -71,21 +77,22 @@ def plot(l):
 #    plt.show()
 #    plt.figure(figsize=(5,5))
     fig = plt.gcf()
-    fig.set_size_inches(10,8)
+    fig.set_size_inches(10, 8)
     fig.savefig('test.png', dpi=100)
 
-def explicitEQS():
-    main = getOperators()
+
+def explicit_eqs():
+    main = get_operators()
     current = None
     start = len(main) - 1
     stop = STOP
     
     while start < len(main) and start < stop:
-        current = getVector(main[start])
+        current = get_vector(main[start])
         for index in range(start):
             if len(main) == stop:
                 break
-            new = addOperators(current, getVector(main[index]))
+            new = add_operators(current, get_vector(main[index]))
             reduced = reduce(new)
             if reduced not in main:
                 main.append(reduced)
@@ -95,24 +102,25 @@ def explicitEQS():
         
     write(main)
     plot(main)
-        
-def partitionEQS():
-    main = getOperators()
+
+
+def partition_eqs():
+    main = get_operators()
     current = None
     start = len(main) - 1
     stop = STOP
     
     while start < len(main) and start < stop:
-        current = getVector(main[start])
+        current = get_vector(main[start])
         for index in range(start):
             if len(main) == stop:
                 break
-            new = addOperators(current, getVector(main[index]))
+            new = add_operators(current, get_vector(main[index]))
             if new not in main:
                 main.append(new)
         start += 1
     write(main)
     plot(main)
-        
-partitionEQS()
-                
+
+
+partition_eqs()

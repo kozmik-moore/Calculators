@@ -8,6 +8,7 @@ Created on Sun Dec 23 15:45:38 2018
 import numpy as np
 import random
 
+
 class SystemSolver:
     def __init__(self, filepath=None):
         """Data format is a text file organized into two columns, domain first
@@ -19,9 +20,9 @@ class SystemSolver:
         self.domain = {'xmin':-5, 'xmax':5, 'ymin':-5, 'ymax':5, 'num':3, 
                        'int_only': True}
         
-        self.extractData(file=filepath)
+        self.extract_data(file=filepath)
         
-    def extractData(self, file=None):
+    def extract_data(self, file=None):
         try:
             if file:
                 f = open(file)
@@ -48,7 +49,7 @@ class SystemSolver:
 #                if type(x[i]) is not int or type(y[i]) is not int:
 #                    int_only = False
 #                    break
-            self.domain = {'xmin':xmin, 'xmax':xmax, 'ymin':ymin, 'ymax':ymax, 
+            self.domain = {'xmin':xmin, 'xmax':xmax, 'ymin':ymin, 'ymax':ymax,
                            'num':len(x), 'int_only': int_only}
         except FileNotFoundError:
             print("Unable to resolve file path or find \'Coord_data.txt\'")
@@ -58,7 +59,7 @@ class SystemSolver:
         B = np.array(self.fillMatrixB())
         self.solution = np.linalg.solve(A,B)
         
-    def createPolynomial(self):
+    def create_polynomial(self):
         n = len(self.x_values)
         self.polynomial = ''
         for i in range(n, 0, -1):
@@ -66,9 +67,9 @@ class SystemSolver:
         self.polynomial = self.polynomial.rstrip('+')
         
     def update(self):
-        self.extractData()
+        self.extract_data()
         self.solveSystem()
-        self.createPolynomial()
+        self.create_polynomial()
         
     def fillMatrixA(self):
         matrix = []
@@ -129,8 +130,7 @@ class SystemSolver:
         y_range = d-c
         if z:
             while n > x_range:
-                n = int(input('Number exceeds range of domain. '+
-                                    'Enter number of points:\n'))
+                n = int(input('Number exceeds range of domain. ' + 'Enter number of points:\n'))
         self.x_values.clear()
         self.y_values.clear()
         if z:
@@ -159,5 +159,4 @@ class SystemSolver:
         self.update()
         
     def printDemoFormat(self):
-        print('{\'xmin\':-5, \'xmax\':5, \'ymin\':-5, \'ymax\':5, \'num\':3,' +
-                       '\'int_only\': True}')
+        print('{\'xmin\':-5, \'xmax\':5, \'ymin\':-5, \'ymax\':5, \'num\':3,' + '\'int_only\': True}')
