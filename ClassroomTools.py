@@ -11,6 +11,7 @@ class SeatingChartMaker:
         self.max_group = 4
         self.gui_output = ""
         self.group_fill_order = [1, 3, 4, 6, 7, 8, 2, 5, 9]
+        self.col_width = 0
         # self.min_group = 3
         # self.exceptions = {}
 
@@ -34,11 +35,13 @@ class SeatingChartMaker:
 
     def import_names(self, file=None):
         self.names_list = None
+        self.col_width = 0
         f = open(file, "r")
         self.names_list = f.readlines()
         f.close()
         for i in range(len(self.names_list)):
             self.names_list[i] = self.names_list[i].rstrip('\n')
+        self.col_width = max(len(word) for row in self.names_list for word in row) + 2
 
     # def set_min_group(self, num):
     #     self.min_group = num
@@ -84,18 +87,32 @@ class SeatingChartMaker:
         for index in self.group_fill_order:
             if len(groups) > 0:
                 self.chart[str(index)] = groups.pop(0)
-            else:
-                self.chart[str(index)] = None
+            # else:
+            #     self.chart[str(index)] = None
         return self.chart
 
     def create_display(self):
         self.gui_output = ""
-        chart = sorted(self.chart)
-        for group in chart:
-            if chart[group]:
-                self.gui_output += "Table" + group + ":\n"
-                for student in chart[group]:
-                    self.gui_output += student + "\n"
+        chart = sorted(self.chart.keys())
+        while chart:
+            i = chart.pop(0)
+            self.gui_output += "Table" + i + ":"
+            first = self.chart[i].copy()
+            if chart:
+                j = chart.pop(0)
+                self.gui_output += "\t\t\tTable" + j + ":\n"
+                second = self.chart[j].copy()
+            for k in range(self.max_group):
+                try:
+                    self.gui_output += first.pop(0)
+                except IndexError:
+                    self.gui_output += "\t\t"
+                try:
+                    self.gui_output += "\t\t\t" + second.pop(0) + "\n"
+                except IndexError:
+                    self.gui_output += "\n"
+            self.gui_output += "\n"
+        print(self.gui_output)
 
 
 class Grader:
