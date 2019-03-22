@@ -12,6 +12,7 @@ class SeatingChartMaker:
         self.gui_output = ""
         self.group_fill_order = [1, 3, 4, 6, 7, 8, 2, 5, 9]
         self.col_width = 0
+        self.chart_name = ""
         # self.min_group = 3
         # self.exceptions = {}
 
@@ -34,6 +35,7 @@ class SeatingChartMaker:
         self.group_fill_order = order
 
     def import_names(self, file=None):
+        self.set_chart_name()
         self.names_list = None
         self.col_width = 0
         f = open(file, "r")
@@ -41,7 +43,7 @@ class SeatingChartMaker:
         f.close()
         for i in range(len(self.names_list)):
             self.names_list[i] = self.names_list[i].rstrip('\n')
-        self.col_width = max(len(word) for row in self.names_list for word in row) + 2
+        self.col_width = max(len(word) for word in self.names_list) + 4
 
     # def set_min_group(self, num):
     #     self.min_group = num
@@ -62,6 +64,10 @@ class SeatingChartMaker:
         for i in range(self.class_size):
             a = self.original_list.pop(random.randint(0, len(self.original_list) - 1))
             self.randomized_list.append(a)
+
+    def set_chart_name(self):
+        f = input("What should this chart be named?\n")
+        self.chart_name = f
 
     def create_groups(self, names=False):
         self.set_randomized_list(names)
@@ -89,30 +95,49 @@ class SeatingChartMaker:
                 self.chart[str(index)] = groups.pop(0)
             # else:
             #     self.chart[str(index)] = None
-        return self.chart
+        # return self.chart
 
     def create_display(self):
         self.gui_output = ""
         chart = sorted(self.chart.keys())
+        row = []
         while chart:
             i = chart.pop(0)
-            self.gui_output += "Table" + i + ":"
             first = self.chart[i].copy()
+            row.append("Table " + i + ":")
             if chart:
                 j = chart.pop(0)
-                self.gui_output += "\t\t\tTable" + j + ":\n"
                 second = self.chart[j].copy()
+                row.append("Table " + j + ":")
+            self.gui_output += "".join(word.ljust(self.col_width) for word in row) + "\n"
             for k in range(self.max_group):
+                row.clear()
                 try:
-                    self.gui_output += first.pop(0)
+                    row.append("  " + first.pop(0))
                 except IndexError:
-                    self.gui_output += "\t\t"
+                    row.append("")
                 try:
-                    self.gui_output += "\t\t\t" + second.pop(0) + "\n"
+                    row.append("  " + second.pop(0))
                 except IndexError:
-                    self.gui_output += "\n"
+                    row.append("")
+                self.gui_output += "".join(word.ljust(self.col_width) for word in row) + "\n"
+            row.clear()
             self.gui_output += "\n"
+
+    def print(self, names):
+        if not self.randomized_list:
+            self.create_groups(names)
+        self.create_display()
         print(self.gui_output)
+
+    def print_to_file(self, names):
+        if not self.randomized_list:
+            self.create_groups(names)
+        self.create_display()
+        filename = self.chart_name + ".txt"
+        f = open(filename, 'w')
+        f.write(self.gui_output)
+        f.close()
 
 
 class Grader:
