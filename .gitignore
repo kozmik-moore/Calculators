@@ -44,9 +44,15 @@ develop-eggs/
 # Operating System Files
 # =========================
 
+#########
+##Pycharm
+#########
+
+.idea/*
+
 ##################
 ##Project Specific
 ##################
 
 test.py
-Coord_data.txt
+*.txt
