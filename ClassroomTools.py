@@ -2,6 +2,8 @@ import random
 
 
 class SeatingChartMaker:
+    """Given a .txt file of newline-separated names, an order for groups, and a maximum group size (default size 4),
+     this class contains methods that create a randomized seating chart."""
     def __init__(self, file=None):
         self.original_list = []
         self.randomized_list = []
@@ -141,6 +143,7 @@ class SeatingChartMaker:
 
 
 class Grader:
+    """Given a .txt file of newline-separated scores and a rubric, this class translates scores into percentages."""
     def __init__(self, file=None):
         self.rubric = {1: 20, 2: 40, 3: 60, 4: 75, 5: 85, 6: 100}
         self.translated_scores = {}
