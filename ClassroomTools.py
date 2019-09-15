@@ -36,21 +36,22 @@ class SeatingChartMaker:
     def set_group_order(self, order):
         self.group_fill_order = order
 
-    def import_names(self, file=None):
+    def import_names(self, file=None):              # TODO expand this method to take over set_original_list
         self.set_chart_name()
         self.names_list = None
         self.col_width = 0
         f = open(file, "r")
         self.names_list = f.readlines()
+        self.class_size = len(self.names_list)
         f.close()
         for i in range(len(self.names_list)):
             self.names_list[i] = self.names_list[i].rstrip('\n')
         self.col_width = max(len(word) for word in self.names_list) + 4
 
-    # def set_min_group(self, num):
+    # def set_min_group(self, num):                 # TODO consider a method for choosing which groups are smaller
     #     self.min_group = num
 
-    def set_original_list(self, names=False):
+    def set_original_list(self, names=False):       # TODO Remove this method (redundant)
         self.original_list.clear()
         if names:
             self.original_list = self.names_list.copy()
@@ -143,9 +144,10 @@ class SeatingChartMaker:
 
 
 class Grader:
-    """Given a .txt file of newline-separated scores and a rubric, this class translates scores into percentages."""
+    """Given a .txt file of newline-separated raw scores and a rubric, this class translates scores into percentages."""
     def __init__(self, file=None):
-        self.rubric = {1: 20, 2: 40, 3: 60, 4: 75, 5: 85, 6: 100}
+        self.default_rubric = {1: 20, 2: 40, 3: 60, 4: 75, 5: 85, 6: 100}
+        self.rubric = self.default_rubric.copy()
         self.translated_scores = {}
         if file:
             self.translate_scores(file)
@@ -157,7 +159,7 @@ class Grader:
         c = 100
         if b is not len(self.rubric):
             c = self.rubric[b] + a*(self.rubric[b+1]-self.rubric[b])
-        return c
+        return round(c,1)
 
     def translate_scores(self, file):
         self.translated_scores.clear()
