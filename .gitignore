@@ -50,3 +50,4 @@ develop-eggs/
 
 test.py
 Coord_data.txt
+venv/
